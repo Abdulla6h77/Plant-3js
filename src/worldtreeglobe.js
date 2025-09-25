@@ -7,6 +7,7 @@ const WorldTreesGlobe = () => {
   const sceneRef = useRef(null);
   const rendererRef = useRef(null);
   const globeRef = useRef(null);
+  const globeGroupRef = useRef(null); // Ref for the group
   const frameIdRef = useRef(null);
   const [selectedCountry, setSelectedCountry] = useState('Pakistan');
   const [treeData, setTreeData] = useState([]);
@@ -345,7 +346,6 @@ const WorldTreesGlobe = () => {
     
     const globe = new THREE.Mesh(globeGeometry, globeMaterial);
     globeRef.current = globe;
-    scene.add(globe);
 
     // Add country boundary lines
     const boundaryGeometry = new THREE.SphereGeometry(1.001, 128, 64);
@@ -356,7 +356,18 @@ const WorldTreesGlobe = () => {
       wireframe: true
     });
     const boundaries = new THREE.Mesh(boundaryGeometry, boundaryMaterial);
-    scene.add(boundaries);
+
+    // Create a group and add the globe and boundaries
+    const globeGroup = new THREE.Group();
+    globeGroup.add(globe);
+    globeGroup.add(boundaries);
+
+    // Add axial tilt
+    const axialTilt = 23.5 * (Math.PI / 180); // Tilt in radians
+    globeGroup.rotation.z = axialTilt;
+
+    globeGroupRef.current = globeGroup;
+    scene.add(globeGroup);
 
     // Basic lighting
     const light = new THREE.AmbientLight(0x404040);
@@ -395,9 +406,9 @@ const WorldTreesGlobe = () => {
     const animate = () => {
       frameIdRef.current = requestAnimationFrame(animate);
 
-      if (globe) {
-        globe.rotation.x = rotationX;
-        globe.rotation.y = rotationY;
+      if (globeGroupRef.current) {
+        globeGroupRef.current.rotation.x = rotationX;
+        globeGroupRef.current.rotation.y = rotationY;
         
         // Auto rotation when not interacting
         if (!isMouseDown) {
@@ -443,12 +454,12 @@ const WorldTreesGlobe = () => {
 
   // Add tree markers
   useEffect(() => {
-    if (!sceneRef.current || !selectedCountry) return;
+    if (!globeGroupRef.current || !selectedCountry) return;
 
     // Remove existing markers
-    const existingMarkers = sceneRef.current.children.filter(child => child.userData?.isTreeMarker);
+    const existingMarkers = globeGroupRef.current.children.filter(child => child.userData?.isTreeMarker);
     existingMarkers.forEach(marker => {
-      sceneRef.current.remove(marker);
+      globeGroupRef.current.remove(marker);
     });
 
     const trees = sampleTreeData[selectedCountry] || [];
@@ -474,7 +485,7 @@ const WorldTreesGlobe = () => {
       marker.position.set(x, y, z);
       marker.userData = { isTreeMarker: true, treeData: tree };
       
-      sceneRef.current.add(marker);
+      globeGroupRef.current.add(marker);
     });
   }, [selectedCountry]);
 
