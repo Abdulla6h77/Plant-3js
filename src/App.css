@@ -1,38 +1,179 @@
-.App {
-  text-align: center;
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Main container styles */
+.globe-container {
+  width: 100%;
+  height: 100vh;
+  background-color: #111827;
+  color: #ffffff;
+  overflow: hidden;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.globe-layout {
+  display: flex;
+  height: 100%;
+}
+
+/* Globe display area */
+.globe-display {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+.globe-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.globe-canvas:active {
+  cursor: grabbing;
+}
+
+/* Controls overlay */
+.globe-controls {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+.globe-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #60a5fa;
+}
+
+.control-group {
+  margin-bottom: 0.75rem;
+}
+
+.control-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: #d1d5db;
+}
+
+.control-select {
+  background-color: #1f2937;
+  color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #4b5563;
+  outline: none;
+  width: 200px;
+  transition: border-color 0.2s ease;
+}
+
+.control-select:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.control-select:hover {
+  border-color: #6b7280;
+}
+
+/* Data panel */
+.data-panel {
+  width: 20rem;
+  background-color: #1f2937;
+  padding: 1rem;
+  overflow-y: auto;
+  border-left: 1px solid #374151;
+  flex-shrink: 0;
+}
+
+.data-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #60a5fa;
+}
+
+.data-summary {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: rgba(55, 65, 81, 0.5);
+  border-radius: 0.5rem;
+  border-left: 3px solid #10b981;
+}
+
+.data-summary p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+  color: #d1d5db;
+}
+
+.tree-locations-title {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #e5e7eb;
+  font-size: 1rem;
+}
+
+.tree-locations-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 0.75rem;
 }
 
-.App-link {
-  color: #61dafb;
+.tree-location-card {
+  background: linear-gradient(135deg, rgba(55, 65, 81, 0.6), rgba(31, 41, 55, 0.6));
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.tree-location-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.tree-name {
+  font-weight: 600;
+  color: #e5e7eb;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.tree-details p {
+  margin: 0.25rem 0;
+  color: #d1d5db;
+  font-size: 0.875rem;
+}
+
+.tree-details .tree-count {
+  font-weight: 700;
+  color: #10b981;
+}
+
+.tree-details {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
 }
